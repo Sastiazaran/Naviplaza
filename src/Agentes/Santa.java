@@ -1,27 +1,14 @@
 package Agentes;
 
-import java.util.Random;
 import java.util.concurrent.Semaphore;
 import javax.swing.ImageIcon;
 
-public class Santa implements Runnable {
-    Estados estado;
-    ImageIcon img;
-    Random r;
-    int x;
-    int y;
-    boolean dead;
-    Semaphore s;
-    int t = 2000;
+public class Santa extends Agentes {
 
-    public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore sem) {
-        estado = Estados.PASEANDO;
-        r = new Random();
-        x = r.nextInt(MAXWIDTH);
-        y = r.nextInt(MAXHEIGHT);
-        dead = false;
-        s = sem;
-        t = 5000;
+    public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem) {
+        super(MAXWIDTH, MAXHEIGHT, sem, "santa");
+        setEstado(Estados.DESCANSANDO);
+        t = 2000;
         img = new ImageIcon("./src/Imagenes/image2.png");
     }
 
@@ -32,7 +19,7 @@ public class Santa implements Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        estado = Estados.SALUDANDO;
+        setEstado(Estados.SALUDANDO);
     }
 
     private void Platicando() {
@@ -42,7 +29,7 @@ public class Santa implements Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        estado = Estados.PLATICANDO;
+        setEstado(Estados.PLATICANDO);
     }
 
     private void Posando() {
@@ -52,11 +39,11 @@ public class Santa implements Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        estado = Estados.POSANDO;
+        setEstado(Estados.POSANDO);
     }
 
     private void Despidiendose() {
-        estado = Estados.DESPIDIENDOSE;
+        setEstado(Estados.DESPIDIENDOSE);
     }
 
     private void Descansando() {
@@ -66,7 +53,7 @@ public class Santa implements Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        estado = Estados.DESCANSANDO;
+        setEstado(Estados.DESCANSANDO);
     }
 
     @Override

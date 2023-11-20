@@ -1,9 +1,29 @@
 package Ventanas;
 
 import javax.swing.*;
+
+import Agentes.Agentes;
+import Agentes.Cliente;
+import Agentes.Santa;
+import Agentes.Vendedora;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Principal extends JFrame {
+    private static Vendedora[] vendedoras;
+    private static Cliente[] clientes; 
+    private static Santa[] santas;  
+    private static Thread[] threads;
+    private static Agentes[] agentes;
+
+    private static int numberV;
+    private static int numberC;
+    private static int numberS;
+
+    static int MAXWIDTH = 400;
+    static int MAXHEIGHT = 400;
 
     public Principal() {
         // principal
@@ -17,19 +37,40 @@ public class Principal extends JFrame {
         JPanel panelBotones = new JPanel(new GridLayout(3, 1));
 
         // botones con imagen
-        panelBotones.add(createImageButton("./src/Imagenes/image1.png", 70, 70));
-        panelBotones.add(createImageButton("./src/Imagenes/image2.png", 50, 50));
-        panelBotones.add(createImageButton("./src/Imagenes/image3.png", 70, 70));
+        JButton btnV = createImageButton("./src/Imagenes/image1.png", 70, 70);
+        JButton btnC = createImageButton("./src/Imagenes/image2.png", 50, 50);
+        JButton btnS = createImageButton("./src/Imagenes/image3.png", 70, 70);
+
+        panelBotones.add(btnV);
+        panelBotones.add(btnC);
+        panelBotones.add(btnS);
 
         // numero threads
         JPanel panelTextFields = new JPanel(new GridLayout(3, 1));
-        panelTextFields.add(new JTextField());
-        panelTextFields.add(new JTextField());
-        panelTextFields.add(new JTextField());
+        JTextField textV = new JTextField();
+        JTextField textC = new JTextField();
+        JTextField textS = new JTextField();
+
+        panelTextFields.add(textV);
+        panelTextFields.add(textC);
+        panelTextFields.add(textS);
 
         // inicio
         JPanel panelBotonCentral = new JPanel(new BorderLayout());
-        panelBotonCentral.add(new JButton("Crear"), BorderLayout.CENTER);
+        JButton btnInicio = new JButton("Crear");
+        btnInicio.addActionListener((ActionListener) new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                numberV = Integer.valueOf(textV.getText());
+                numberC = Integer.valueOf(textC.getText());
+                numberS = Integer.valueOf(textS.getText());
+                btnInicio.setEnabled(false);
+                createAndStartThreads();
+            }
+        });
+
+
+        panelBotonCentral.add(btnInicio, BorderLayout.CENTER);
 
         contenedorPrincipal.add(panelBotones);
         contenedorPrincipal.add(panelTextFields);
@@ -37,6 +78,51 @@ public class Principal extends JFrame {
         add(contenedorPrincipal);
 
         setVisible(true);
+    }
+
+    public static void createAndStartThreads() {
+        vendedoras = new Vendedora[numberV];
+        clientes = new Cliente[numberC];
+        santas = new Santa[numberS];
+
+        int total = numberV + numberC + numberS;
+        threads = new Thread[total];
+        agentes = new Agentes[total];
+
+        for(int i = 0; i<numberV; i++){
+            Vendedora v = new Vendedora(MAXWIDTH, MAXHEIGHT, null); // Pasar semaphores ()? Dictionary
+            v.setName("Vendedora "+String.valueOf(i));
+            vendedoras[i] = v;
+            agentes[i] = v;
+            Thread t = new Thread(v);
+            t.setName("Vendedora "+String.valueOf(i));
+            threads[i] = t;
+            t.start();
+        }
+        for(int i = 0; i<numberC; i++){
+            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, null); // PASAR SEMPAHORES
+            c.setName("Cliente "+String.valueOf(i));
+            clientes[i] = c;
+            agentes[i+numberV] = c;
+            Thread t = new Thread(c);
+            t.setName("Cliente "+String.valueOf(i));
+            threads[i+numberV] = t;
+            t.start();
+        }
+        for(int i = 0; i<numberS; i++){
+            Santa s = new Santa(MAXWIDTH, MAXHEIGHT, null); // SEMAPHore
+            s.setName("Santa "+String.valueOf(i));
+            santas[i] = s;
+            agentes[i+numberV+numberC] = s;
+            Thread t = new Thread(s);
+            t.setName("Santa "+String.valueOf(i));
+            threads[i+numberV+numberC] = t;
+            t.start();
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            new Tabla(agentes, total);
+        });
     }
 
     private JButton createImageButton(String imagePath, int width, int height) {

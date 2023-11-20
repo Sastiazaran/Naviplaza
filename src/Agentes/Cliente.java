@@ -1,26 +1,13 @@
 package Agentes;
 
-import java.util.Random;
 import java.util.concurrent.Semaphore;
 import javax.swing.ImageIcon;
 
-public class Cliente implements Runnable {
-    Estados estado;
-    ImageIcon img;
-    Random r;
-    int x;
-    int y;
-    boolean dead;
-    Semaphore s;
-    int t;
+public class Cliente extends Agentes {
 
-    public Cliente(int MAXWIDTH, int MAXHEIGHT, Semaphore sem) {
-        estado = Estados.PASEANDO;
-        r = new Random();
-        x = r.nextInt(MAXWIDTH);
-        y = r.nextInt(MAXHEIGHT);
-        dead = false;
-        s = sem;
+    public Cliente(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem) {
+        super(MAXWIDTH, MAXHEIGHT, sem, "cliente");
+        setEstado(Estados.PASEANDO);
         t = 5000;
         img = new ImageIcon("./src/Imagenes/image2.png");
     }
@@ -30,10 +17,10 @@ public class Cliente implements Runnable {
             if (r.nextInt(2) == 0) {
                 // ESPERA A SANTA
                 try {
-                    s.acquire();
-                    estado = Estados.ESPERANDO;
+                    s[0].acquire();
+                    setEstado(Estados.ESPERANDOSANTA);
                     wait(t);
-                    s.release();
+                    s[0].release();
                 } catch (Exception e) {
                 }
             } else {

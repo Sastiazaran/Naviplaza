@@ -2,18 +2,18 @@ package Ventanas;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
+import Agentes.Estados;
 import Agentes.Agentes;
 
 public class Tabla extends JFrame {
     private static DefaultTableModel dtm;
     private JScrollPane scrollPane;
     private JTable table;
-    private Agentes[] agentes;
-    private int totalAg;
+    private static Agentes[] agentes;
+    private static int totalAg;
 
-    public Tabla(Agentes[] agentes, int n) {
-        this.agentes = agentes;
+    public Tabla(Agentes[] a, int n) {
+        this.agentes = a;
         this.totalAg = n;
         String[] columnNames = { "Nombre", "Estado", "Seccion Critica", "Buffer", "Muerto" };
 
@@ -39,6 +39,15 @@ public class Tabla extends JFrame {
             });
         });
         timer.start();
+    }
+
+    public static void setAllPanic(int except){
+        for (int i = 0; i < totalAg; i++) {
+            if(i==except){break;}
+            agentes[i].setBuffer("AAAAAA");
+            agentes[i].setEstado(Estados.PANICO);
+            agentes[i].setSecCrit("AAAAAAAAAAA");
+        }
     }
 
     public void updateRows() {

@@ -20,8 +20,10 @@ public class Vendedora extends Agentes {
         Thread.sleep(t);
         if (descansar) {
             setEstado(Estados.DESCANSANDO);
+            setBuffer("Coffee Break");
             System.out.println("Vendedora descansando");
             Thread.sleep(t);
+            setBuffer("none");
         }
     }
 
@@ -39,10 +41,11 @@ public class Vendedora extends Agentes {
         System.out.println("Número aleatorio para descansar: " + randomDesc);
     }
 
-    public void cobrar() {
+    public void cobrar() throws InterruptedException {
         setEstado(Estados.COBRANDO);
         setBuffer("Caja Registradora");
         System.out.println("Vendedora cobrando");
+        Thread.sleep(t); 
     }
 
     public void decidirEnvoltura() {
@@ -61,18 +64,25 @@ public class Vendedora extends Agentes {
         setEstado(Estados.DESPIDIENDOSE);
         setBuffer("none");
         setSecCrit("none");
+        Thread.sleep(t/2); 
     }
 
     @Override
     public void run() {
-        while (!dead) {
+        while (!unavailable()) {
             try { 
                 esperarCliente();
+                if(unavailable()) break;
                 decidirDescansar();
+                if(unavailable()) break;
                 mostrarProducto();
+                if(unavailable()) break;
                 cobrar();
+                if(unavailable()) break;
                 decidirEnvoltura();
+                if(unavailable()) break;
                 envolverYEntregar();
+                if(unavailable()) break;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

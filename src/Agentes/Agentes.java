@@ -65,12 +65,43 @@ public abstract class Agentes implements Runnable {
     public boolean isDead() {
         return dead;
     }
+
+    public boolean isPanic(){
+        if(estado==Estados.PANICO){
+            return true;
+        }
+        return false;
+    }
     
     public void setDead(boolean dead) {
         this.dead = dead;
+        setBuffer("none");
+        setSecCrit("none");
+        setEstado(Estados.MUERTO);
     }
 
     public String getDeadString(){
         return String.valueOf(dead);
+    }
+
+    public void sleep(){
+        try {
+            Thread.sleep(t);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public boolean unavailable(){
+        if(isDead() || isPanic()) return true;
+        return false;
+    }
+
+    public String getEstado(Estados e) {
+        if (e == estado) {
+            return "X";
+        }
+        return " ";
     }
 }

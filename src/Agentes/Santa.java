@@ -58,12 +58,18 @@ public class Santa extends Agentes {
 
     @Override
     public void run() {
-        while (!dead) {
+        while (!unavailable()) {
             Descansando();
+            if(unavailable()) break;
             Saludando();
+            if(unavailable()) break;
             Platicando();
+            if(unavailable()) break;
             Posando();
+            if(unavailable()) break;
             Despidiendose();
+            if(unavailable()) break;
         }
+
     }
 }

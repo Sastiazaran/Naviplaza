@@ -2,16 +2,21 @@ package Ventanas;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import Agentes.Agentes;
+import Agentes.Estados;
 
 public class TablaAgente extends JFrame {
     private static DefaultTableModel dtm;
-    private JTable table;
-    private Thread[] hilos;
     private JScrollPane scrollPane;
+    private JTable table;
+    private static Agentes[] agentes;
+    private static int totalAg;
+    private static int type;
 
-    public TablaAgente(Thread[] hilos) {
-        this.hilos = hilos;
-        String[] columnNames = { "Nombre", "Accesos", "Esperando", "Seccion Critica", "Muriendo", "Muerto" };
+    public TablaAgente(Agentes[] a, int n, String[] columnNames, int t) {
+        agentes = a;
+        totalAg = n;
+        type = t;
 
         // Tabla
         dtm = new DefaultTableModel(columnNames, 0);
@@ -21,9 +26,9 @@ public class TablaAgente extends JFrame {
         scrollPane = new JScrollPane(table);
         add(scrollPane);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Tabla de Control");
-        setSize(800, 400);
+        setSize(1000, 400);
         setLocationRelativeTo(null);
         setVisible(true);
 
@@ -40,10 +45,33 @@ public class TablaAgente extends JFrame {
     public void updateRows() {
         // Quitar info previa
         dtm.setRowCount(0);
-        for (int i = 0; i < hilos.length; i++) {
-            Object[] rowData = { hilos[i].getName(), hilos[i].getAccesos(), hilos[i].getStatus(0),
-                    hilos[i].getStatus(1), hilos[i].getStatus(2), hilos[i].getStatus(3) };
-            dtm.addRow(rowData);
+        if(type==0){
+            for (int i = 0; i < totalAg; i++) {
+                Object[] rowData = { agentes[i].getName(), agentes[i].getEstado(Estados.DESCANSANDO),
+                    agentes[i].getEstado(Estados.ESPERANDOCLIENTE), agentes[i].getEstado(Estados.MOSTRANDO),
+                    agentes[i].getEstado(Estados.ENVOLVIENDO), agentes[i].getEstado(Estados.COBRANDO),
+                    agentes[i].getEstado(Estados.DESPIDIENDOSE), agentes[i].getEstado(Estados.MUERTO),
+                    agentes[i].getEstado(Estados.PANICO)};
+                dtm.addRow(rowData);
+            }
+        }else if(type==1){
+            for (int i = 0; i < totalAg; i++) {
+                Object[] rowData = { agentes[i].getName(), agentes[i].getEstado(Estados.PASEANDO),
+                    agentes[i].getEstado(Estados.ESPERANDOSANTA), agentes[i].getEstado(Estados.CONVIVIENDO),
+                    agentes[i].getEstado(Estados.VIENDOREG), agentes[i].getEstado(Estados.ESCOGIENDOREG),
+                    agentes[i].getEstado(Estados.ESPERANDOENVOLTURA), agentes[i].getEstado(Estados.PAGANDO),
+                    agentes[i].getEstado(Estados.MUERTO), agentes[i].getEstado(Estados.PANICO)};
+                dtm.addRow(rowData);
+            }
+        }else{
+            for (int i = 0; i < totalAg; i++) {
+                Object[] rowData = { agentes[i].getName(), agentes[i].getEstado(Estados.DESCANSANDO),
+                    agentes[i].getEstado(Estados.SALUDANDO), agentes[i].getEstado(Estados.PLATICANDO),
+                    agentes[i].getEstado(Estados.POSANDO), agentes[i].getEstado(Estados.DESPIDIENDOSE),
+                    agentes[i].getEstado(Estados.MUERTO),
+                    agentes[i].getEstado(Estados.PANICO)};
+                dtm.addRow(rowData);
+            }
         }
     }
 }

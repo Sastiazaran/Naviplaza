@@ -25,6 +25,8 @@ public class Principal extends JFrame {
     static int MAXWIDTH = 400;
     static int MAXHEIGHT = 400;
 
+    static boolean started = false;
+
     public Principal() {
         // principal
         setTitle("Naviplaza");
@@ -40,6 +42,31 @@ public class Principal extends JFrame {
         JButton btnV = createImageButton("./src/Imagenes/image1.png", 70, 70);
         JButton btnC = createImageButton("./src/Imagenes/image2.png", 50, 50);
         JButton btnS = createImageButton("./src/Imagenes/image3.png", 70, 70);
+
+        btnV.addActionListener((ActionListener) new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] events = { "Nombre", "Descansando", "Esperando Cliente", "Mostrando", "Envolviendo", "Cobrando", "Despidiendose", "Muerto", "Panico"};
+                createAgentTable(vendedoras, numberV, events, 0);
+            }
+        });
+
+        btnC.addActionListener((ActionListener) new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] events = { "Nombre", "Paseando", "Fila de Santa", "Con Santa", "Viendo Regalos", "Escogiendo Regalos", "Esperando Envoltura", "Pagando", "Muerto", "Panico"};
+                createAgentTable(clientes, numberC, events, 1);
+            }
+        });
+
+        btnS.addActionListener((ActionListener) new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] events = { "Nombre", "Descansando", "Saludando", "Platicando", "Posando", "Despidiendose", "Muerto", "Panico"};
+                createAgentTable(santas, numberS, events, 2);
+            }
+        });
+
 
         panelBotones.add(btnV);
         panelBotones.add(btnC);
@@ -119,10 +146,20 @@ public class Principal extends JFrame {
             threads[i+numberV+numberC] = t;
             t.start();
         }
+        
+        new Matar(vendedoras, clientes, santas);
 
         SwingUtilities.invokeLater(() -> {
             new Tabla(agentes, total);
         });
+
+        started = true;
+    }
+
+    private void createAgentTable(Agentes[] a, int n, String[] columnNames, int t){
+        if(started){
+            new TablaAgente(a, n, columnNames, t);
+        }
     }
 
     private JButton createImageButton(String imagePath, int width, int height) {

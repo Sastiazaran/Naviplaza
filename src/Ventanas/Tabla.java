@@ -32,7 +32,7 @@ public class Tabla extends JFrame {
         setVisible(true);
 
         // Timer
-        int delay = 40;
+        int delay = 10;
         Timer timer = new Timer(delay, e -> {
             SwingUtilities.invokeLater(() -> {
                 updateRows(); // Actualizar con EDT

@@ -158,7 +158,9 @@ public class Principal extends JFrame {
 
     private void createAgentTable(Agentes[] a, int n, String[] columnNames, int t){
         if(started){
-            new TablaAgente(a, n, columnNames, t);
+            SwingUtilities.invokeLater(() -> {
+                new TablaAgente(a, n, columnNames, t);
+            });
         }
     }
 

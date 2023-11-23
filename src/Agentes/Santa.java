@@ -13,47 +13,52 @@ public class Santa extends Agentes {
     }
 
     private void Saludando() {
+        setEstado(Estados.SALUDANDO);
         try {
             Thread.sleep(t);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        setEstado(Estados.SALUDANDO);
     }
 
     private void Platicando() {
+        setEstado(Estados.PLATICANDO);
         try {
             Thread.sleep(t);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        setEstado(Estados.PLATICANDO);
     }
 
     private void Posando() {
+        setEstado(Estados.POSANDO);
         try {
             Thread.sleep(t);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        setEstado(Estados.POSANDO);
     }
 
     private void Despidiendose() {
         setEstado(Estados.DESPIDIENDOSE);
+        sleep();
     }
 
     private void Descansando() {
+        setEstado(Estados.DESCANSANDO);
         try {
             Thread.sleep(t);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        setEstado(Estados.DESCANSANDO);
+    }
+
+    private int decidirQueHacer(){
+        return r.nextInt(2);
     }
 
     @Override
@@ -61,14 +66,17 @@ public class Santa extends Agentes {
         while (!unavailable()) {
             Descansando();
             if(unavailable()) break;
-            Saludando();
-            if(unavailable()) break;
-            Platicando();
-            if(unavailable()) break;
-            Posando();
-            if(unavailable()) break;
-            Despidiendose();
-            if(unavailable()) break;
+            int d = decidirQueHacer();
+            if(d==0){
+                Saludando();
+                if(unavailable()) break;
+                Platicando();
+                if(unavailable()) break;
+                Posando();
+                if(unavailable()) break;
+                Despidiendose();
+                if(unavailable()) break;
+            }
         }
 
     }

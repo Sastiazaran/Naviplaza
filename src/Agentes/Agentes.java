@@ -99,7 +99,7 @@ public abstract class Agentes implements Runnable {
     }
 
     public String getEstado(Estados e) {
-        if (e == estado) {
+        if (estado == e) {
             return "X";
         }
         return " ";

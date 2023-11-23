@@ -13,8 +13,8 @@ public class Tabla extends JFrame {
     private static int totalAg;
 
     public Tabla(Agentes[] a, int n) {
-        this.agentes = a;
-        this.totalAg = n;
+        agentes = a;
+        totalAg = n;
         String[] columnNames = { "Nombre", "Estado", "Seccion Critica", "Buffer", "Muerto" };
 
         // Tabla

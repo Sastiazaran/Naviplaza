@@ -46,7 +46,7 @@ public class Principal extends JFrame {
         btnV.addActionListener((ActionListener) new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] events = { "Nombre", "Descansando", "Esperando Cliente", "Mostrando", "Envolviendo", "Cobrando", "Despidiendose", "Muerto", "Panico"};
+                String[] events = { "Nombre", "Descansando", "Esperando Cliente", "Mostrando", "Cobrando", "Envolviendo", "Despidiendose", "Muerto", "Panico"};
                 createAgentTable(vendedoras, numberV, events, 0);
             }
         });

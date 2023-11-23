@@ -17,7 +17,6 @@ public class Vendedora extends Agentes {
 
     public void esperarCliente() throws InterruptedException {
         System.out.println("Vendedora esperando cliente");
-        Thread.sleep(t);
         if (descansar) {
             setEstado(Estados.DESCANSANDO);
             setBuffer("Coffee Break");
@@ -25,6 +24,7 @@ public class Vendedora extends Agentes {
             Thread.sleep(t);
             setBuffer("none");
         }
+        Thread.sleep(t);
     }
 
     public void mostrarProducto() throws InterruptedException {
@@ -75,10 +75,10 @@ public class Vendedora extends Agentes {
                 if(unavailable()) break;
                 decidirDescansar();
                 if(unavailable()) break;
+                if(unavailable()) break;
                 mostrarProducto();
                 if(unavailable()) break;
                 cobrar();
-                if(unavailable()) break;
                 decidirEnvoltura();
                 if(unavailable()) break;
                 envolverYEntregar();

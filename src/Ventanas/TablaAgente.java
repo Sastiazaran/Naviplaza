@@ -49,7 +49,7 @@ public class TablaAgente extends JFrame {
             for (int i = 0; i < totalAg; i++) {
                 Object[] rowData = { agentes[i].getName(), agentes[i].getEstado(Estados.DESCANSANDO),
                     agentes[i].getEstado(Estados.ESPERANDOCLIENTE), agentes[i].getEstado(Estados.MOSTRANDO),
-                    agentes[i].getEstado(Estados.ENVOLVIENDO), agentes[i].getEstado(Estados.COBRANDO),
+                    agentes[i].getEstado(Estados.COBRANDO), agentes[i].getEstado(Estados.ENVOLVIENDO),
                     agentes[i].getEstado(Estados.DESPIDIENDOSE), agentes[i].getEstado(Estados.MUERTO),
                     agentes[i].getEstado(Estados.PANICO)};
                 dtm.addRow(rowData);

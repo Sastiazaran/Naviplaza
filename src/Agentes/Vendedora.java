@@ -17,6 +17,7 @@ public class Vendedora extends Agentes {
 
     public void esperarCliente() throws InterruptedException {
         System.out.println("Vendedora esperando cliente");
+        setEstado(Estados.ESPERANDOCLIENTE);
         if (descansar) {
             setEstado(Estados.DESCANSANDO);
             setBuffer("Coffee Break");

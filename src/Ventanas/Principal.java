@@ -39,9 +39,9 @@ public class Principal extends JFrame {
         JPanel panelBotones = new JPanel(new GridLayout(3, 1));
 
         // botones con imagen
-        JButton btnV = createImageButton("./src/Imagenes/image1.png", 70, 70);
-        JButton btnC = createImageButton("./src/Imagenes/image2.png", 50, 50);
-        JButton btnS = createImageButton("./src/Imagenes/image3.png", 70, 70);
+        JButton btnV = createImageButton("Imagenes/image1.png", 70, 70);
+        JButton btnC = createImageButton("Imagenes/image2.png", 50, 50);
+        JButton btnS = createImageButton("Imagenes/image3.png", 70, 70);
 
         btnV.addActionListener((ActionListener) new ActionListener() {
             @Override
@@ -84,7 +84,7 @@ public class Principal extends JFrame {
 
         // inicio
         JPanel panelBotonCentral = new JPanel(new BorderLayout());
-        JButton btnInicio = new JButton("Crear");
+        JButton btnInicio = createImageButton("Imagenes/naviplazastart.png", 110, 70);
         btnInicio.addActionListener((ActionListener) new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

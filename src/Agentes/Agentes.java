@@ -11,7 +11,7 @@ public abstract class Agentes implements Runnable {
     int x;
     int y;
     boolean dead;
-    
+    Agentes interactuaCon;
     Semaphore[] s;
     int t;
     String name;

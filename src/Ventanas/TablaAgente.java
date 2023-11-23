@@ -6,12 +6,12 @@ import Agentes.Agentes;
 import Agentes.Estados;
 
 public class TablaAgente extends JFrame {
-    private static DefaultTableModel dtm;
+    private DefaultTableModel dtm;
     private JScrollPane scrollPane;
     private JTable table;
-    private static Agentes[] agentes;
-    private static int totalAg;
-    private static int type;
+    private Agentes[] agentes;
+    private int totalAg;
+    private int type;
 
     public TablaAgente(Agentes[] a, int n, String[] columnNames, int t) {
         agentes = a;
@@ -27,7 +27,13 @@ public class TablaAgente extends JFrame {
         add(scrollPane);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setTitle("Tabla de Control");
+        if(type==0){
+            setTitle("Vendedoras");
+        }else if(type==1){
+            setTitle("Clientes");
+        }else{
+            setTitle("Santas");
+        }
         setSize(1000, 400);
         setLocationRelativeTo(null);
         setVisible(true);

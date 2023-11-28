@@ -10,6 +10,7 @@ import Agentes.Vendedora;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Principal extends JFrame {
     private static Vendedora[] vendedoras;
@@ -18,14 +19,24 @@ public class Principal extends JFrame {
     private static Thread[] threads;
     private static Agentes[] agentes;
 
+    private static VVendedoras vVendedoras;
+    private static VClientes vClientes;
+    private static VSanta vSanta;
+
     private static int numberV;
     private static int numberC;
     private static int numberS;
+
+    JTextField textV;
+    JTextField textS;
+    JTextField textC;
 
     static int MAXWIDTH = 400;
     static int MAXHEIGHT = 400;
 
     static boolean started = false;
+
+    private static ArrayList<ImageIcon> vendedoraImages;
 
     public Principal() {
         // principal
@@ -34,6 +45,10 @@ public class Principal extends JFrame {
         setSize(1200, 300);
 
         JPanel contenedorPrincipal = new JPanel(new GridLayout(1, 3));
+
+        //Imagen
+        vendedoraImages = new ArrayList<ImageIcon>();
+        vendedoraImages.add(new ImageIcon("Imagenes/Resized/image1.png"));
 
         //titulo
         ImageIcon titleIcon = new ImageIcon("Imagenes/naviplazatittle.png");
@@ -47,11 +62,18 @@ public class Principal extends JFrame {
         JButton btnC = createImageButton("Imagenes/image2.png", 50, 50);
         JButton btnS = createImageButton("Imagenes/image3.png", 70, 70);
 
-        btnV.addActionListener((ActionListener) new ActionListener() {
+        btnV.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String[] events = { "Nombre", "Descansando", "Esperando Cliente", "Mostrando", "Cobrando", "Envolviendo", "Despidiendose", "Muerto", "Panico"};
                 createAgentTable(vendedoras, numberV, events, 0);
+                numberV = Integer.parseInt(textV.getText());
+                JFrame f = new JFrame();
+                vVendedoras = new VVendedoras(vendedoraImages);
+                f.setSize(500,500);
+                f.add(vVendedoras, BorderLayout.CENTER);
+                f.show();
+                vVendedoras.repaint();
             }
         });
 
@@ -60,6 +82,13 @@ public class Principal extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String[] events = { "Nombre", "Paseando", "Fila de Santa", "Con Santa", "Viendo Regalos", "Escogiendo Regalos", "Esperando Envoltura", "Pagando", "Muerto", "Panico"};
                 createAgentTable(clientes, numberC, events, 1);
+                numberC = Integer.parseInt(textC.getText());
+                JFrame f = new JFrame();
+                vClientes = new VClientes();
+                f.setSize(500,500);
+                f.add(vClientes, BorderLayout.CENTER);
+                f.show();
+                vClientes.repaint();
             }
         });
 
@@ -68,6 +97,13 @@ public class Principal extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String[] events = { "Nombre", "Descansando", "Saludando", "Platicando", "Posando", "Despidiendose", "Muerto", "Panico"};
                 createAgentTable(santas, numberS, events, 2);
+                numberS = Integer.parseInt(textS.getText());
+                JFrame f = new JFrame();
+                vSanta = new VSanta();
+                f.setSize(500,500);
+                f.add(vSanta, BorderLayout.CENTER);
+                f.show();
+                vSanta.repaint();
             }
         });
 
@@ -78,9 +114,9 @@ public class Principal extends JFrame {
 
         // numero threads
         JPanel panelTextFields = new JPanel(new GridLayout(3, 1));
-        JTextField textV = new JTextField();
-        JTextField textC = new JTextField();
-        JTextField textS = new JTextField();
+         textV = new JTextField();
+         textC = new JTextField();
+         textS = new JTextField();
 
         panelTextFields.add(textV);
         panelTextFields.add(textC);
@@ -175,5 +211,17 @@ public class Principal extends JFrame {
         JButton button = new JButton(new ImageIcon(scaledImage));
         button.setContentAreaFilled(false);
         return button;
+    }
+
+    public static int getNumberV() {
+        return numberV;
+    }
+
+    public static int getNumberS() {
+        return numberS;
+    }
+
+    public static int getNumberC() {
+        return numberC;
     }
 }

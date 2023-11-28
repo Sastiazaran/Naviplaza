@@ -5,13 +5,13 @@ import javax.swing.ImageIcon;
 
 public class Vendedora extends Agentes {
 
-    public Vendedora(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem) {
+    public Vendedora(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem, int t) {
         super(MAXWIDTH, MAXHEIGHT, sem, "vendedora");
         setEstado(Estados.ESPERANDOCLIENTE);
-        t = 5000;
+        this.t = t;
         img = new ImageIcon("Imagenes/image1.png");
     }
-    
+
     private boolean envolver;
     private boolean descansar;
 
@@ -32,11 +32,11 @@ public class Vendedora extends Agentes {
         setEstado(Estados.MOSTRANDO);
         setSecCrit("Con Cliente");
         System.out.println("Vendedora mostrando producto");
-        Thread.sleep(t); 
-        //estado = Estados.DESPIDIENDOSE; falta condicional de si se va el cliente
+        Thread.sleep(t);
+        // estado = Estados.DESPIDIENDOSE; falta condicional de si se va el cliente
     }
 
-    public void decidirDescansar(){
+    public void decidirDescansar() {
         int randomDesc = r.nextInt(100);
         descansar = randomDesc % 2 == 0;
         System.out.println("Número aleatorio para descansar: " + randomDesc);
@@ -46,7 +46,7 @@ public class Vendedora extends Agentes {
         setEstado(Estados.COBRANDO);
         setBuffer("Caja Registradora");
         System.out.println("Vendedora cobrando");
-        Thread.sleep(t); 
+        Thread.sleep(t);
     }
 
     public void decidirEnvoltura() {
@@ -59,31 +59,37 @@ public class Vendedora extends Agentes {
         if (envolver) {
             setEstado(Estados.ENVOLVIENDO);
             System.out.println("Vendedora envolviendo producto");
-            Thread.sleep(t); 
+            Thread.sleep(t);
         }
         System.out.println("Vendedora entregando producto");
         setEstado(Estados.DESPIDIENDOSE);
         setBuffer("none");
         setSecCrit("none");
-        Thread.sleep(t/2); 
+        Thread.sleep(t / 2);
     }
 
     @Override
     public void run() {
         while (!unavailable()) {
-            try { 
+            try {
                 esperarCliente();
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
                 decidirDescansar();
-                if(unavailable()) break;
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
+                if (unavailable())
+                    break;
                 mostrarProducto();
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
                 cobrar();
                 decidirEnvoltura();
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
                 envolverYEntregar();
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

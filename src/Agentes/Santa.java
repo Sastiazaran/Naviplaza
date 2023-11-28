@@ -5,10 +5,10 @@ import javax.swing.ImageIcon;
 
 public class Santa extends Agentes {
 
-    public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem) {
+    public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem, int t) {
         super(MAXWIDTH, MAXHEIGHT, sem, "santa");
         setEstado(Estados.DESCANSANDO);
-        t = 2000;
+        this.t = t;
         img = new ImageIcon("./src/Imagenes/image2.png");
     }
 
@@ -57,7 +57,7 @@ public class Santa extends Agentes {
         }
     }
 
-    private int decidirQueHacer(){
+    private int decidirQueHacer() {
         return r.nextInt(2);
     }
 
@@ -65,17 +65,22 @@ public class Santa extends Agentes {
     public void run() {
         while (!unavailable()) {
             Descansando();
-            if(unavailable()) break;
+            if (unavailable())
+                break;
             int d = decidirQueHacer();
-            if(d==0){
+            if (d == 0) {
                 Saludando();
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
                 Platicando();
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
                 Posando();
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
                 Despidiendose();
-                if(unavailable()) break;
+                if (unavailable())
+                    break;
             }
         }
 

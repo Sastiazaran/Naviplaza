@@ -13,16 +13,20 @@ import java.awt.event.ActionListener;
 
 public class Principal extends JFrame {
     private static Vendedora[] vendedoras;
-    private static Cliente[] clientes; 
-    private static Santa[] santas;  
+    private static Cliente[] clientes;
+    private static Santa[] santas;
     private static Thread[] threads;
     private static Agentes[] agentes;
 
+    private static int t;
     private static int numberV;
     private static int numberC;
     private static int numberS;
 
-    static int MAXWIDTH = 400;
+    private static JTextField textT;
+    private JLabel labelTime;
+
+    static int MAXWIDTH = 600;
     static int MAXHEIGHT = 400;
 
     static boolean started = false;
@@ -31,9 +35,9 @@ public class Principal extends JFrame {
         // principal
         setTitle("Naviplaza");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(MAXWIDTH, MAXHEIGHT);
 
-        JPanel contenedorPrincipal = new JPanel(new GridLayout(1, 3));
+        JPanel contenedorPrincipal = new JPanel(new GridLayout(2, 3));
 
         // botones naviplaza
         JPanel panelBotones = new JPanel(new GridLayout(3, 1));
@@ -46,7 +50,8 @@ public class Principal extends JFrame {
         btnV.addActionListener((ActionListener) new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] events = { "Nombre", "Descansando", "Esperando Cliente", "Mostrando", "Cobrando", "Envolviendo", "Despidiendose", "Muerto", "Panico"};
+                String[] events = { "Nombre", "Descansando", "Esperando Cliente", "Mostrando", "Cobrando",
+                        "Envolviendo", "Despidiendose", "Muerto", "Panico" };
                 createAgentTable(vendedoras, numberV, events, 0);
             }
         });
@@ -54,7 +59,8 @@ public class Principal extends JFrame {
         btnC.addActionListener((ActionListener) new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] events = { "Nombre", "Paseando", "Fila de Santa", "Con Santa", "Viendo Regalos", "Escogiendo Regalos", "Esperando Envoltura", "Pagando", "Muerto", "Panico"};
+                String[] events = { "Nombre", "Paseando", "Fila de Santa", "Con Santa", "Viendo Regalos",
+                        "Escogiendo Regalos", "Esperando Envoltura", "Pagando", "Muerto", "Panico" };
                 createAgentTable(clientes, numberC, events, 1);
             }
         });
@@ -62,11 +68,11 @@ public class Principal extends JFrame {
         btnS.addActionListener((ActionListener) new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] events = { "Nombre", "Descansando", "Saludando", "Platicando", "Posando", "Despidiendose", "Muerto", "Panico"};
+                String[] events = { "Nombre", "Descansando", "Saludando", "Platicando", "Posando", "Despidiendose",
+                        "Muerto", "Panico" };
                 createAgentTable(santas, numberS, events, 2);
             }
         });
-
 
         panelBotones.add(btnV);
         panelBotones.add(btnC);
@@ -96,12 +102,21 @@ public class Principal extends JFrame {
             }
         });
 
-
         panelBotonCentral.add(btnInicio, BorderLayout.CENTER);
+
+        labelTime = new JLabel("Time in events:");
+        panelTextFields.add(labelTime);
+        textT = new JTextField();
+        panelTextFields.add(textT);
+
+        JPanel tPanel = new JPanel(new GridLayout(1, 2));
+        tPanel.add(labelTime);
+        tPanel.add(textT);
 
         contenedorPrincipal.add(panelBotones);
         contenedorPrincipal.add(panelTextFields);
         contenedorPrincipal.add(panelBotonCentral);
+        contenedorPrincipal.add(tPanel);
         add(contenedorPrincipal);
 
         setVisible(true);
@@ -116,37 +131,39 @@ public class Principal extends JFrame {
         threads = new Thread[total];
         agentes = new Agentes[total];
 
-        for(int i = 0; i<numberV; i++){
-            Vendedora v = new Vendedora(MAXWIDTH, MAXHEIGHT, null); // Pasar semaphores ()? Dictionary
-            v.setName("Vendedora "+String.valueOf(i));
+        t = Integer.valueOf(textT.getText());
+
+        for (int i = 0; i < numberV; i++) {
+            Vendedora v = new Vendedora(MAXWIDTH, MAXHEIGHT, null, t); // Pasar semaphores ()? Dictionary
+            v.setName("Vendedora " + String.valueOf(i));
             vendedoras[i] = v;
             agentes[i] = v;
             Thread t = new Thread(v);
-            t.setName("Vendedora "+String.valueOf(i));
+            t.setName("Vendedora " + String.valueOf(i));
             threads[i] = t;
             t.start();
         }
-        for(int i = 0; i<numberC; i++){
-            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, null); // PASAR SEMPAHORES
-            c.setName("Cliente "+String.valueOf(i));
+        for (int i = 0; i < numberC; i++) {
+            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, null, t); // PASAR SEMPAHORES
+            c.setName("Cliente " + String.valueOf(i));
             clientes[i] = c;
-            agentes[i+numberV] = c;
+            agentes[i + numberV] = c;
             Thread t = new Thread(c);
-            t.setName("Cliente "+String.valueOf(i));
-            threads[i+numberV] = t;
+            t.setName("Cliente " + String.valueOf(i));
+            threads[i + numberV] = t;
             t.start();
         }
-        for(int i = 0; i<numberS; i++){
-            Santa s = new Santa(MAXWIDTH, MAXHEIGHT, null); // SEMAPHore
-            s.setName("Santa "+String.valueOf(i));
+        for (int i = 0; i < numberS; i++) {
+            Santa s = new Santa(MAXWIDTH, MAXHEIGHT, null, t); // SEMAPHore
+            s.setName("Santa " + String.valueOf(i));
             santas[i] = s;
-            agentes[i+numberV+numberC] = s;
+            agentes[i + numberV + numberC] = s;
             Thread t = new Thread(s);
-            t.setName("Santa "+String.valueOf(i));
-            threads[i+numberV+numberC] = t;
+            t.setName("Santa " + String.valueOf(i));
+            threads[i + numberV + numberC] = t;
             t.start();
         }
-        
+
         new Matar(vendedoras, clientes, santas);
 
         SwingUtilities.invokeLater(() -> {
@@ -156,8 +173,8 @@ public class Principal extends JFrame {
         started = true;
     }
 
-    private void createAgentTable(Agentes[] a, int n, String[] columnNames, int t){
-        if(started){
+    private void createAgentTable(Agentes[] a, int n, String[] columnNames, int t) {
+        if (started) {
             SwingUtilities.invokeLater(() -> {
                 new TablaAgente(a, n, columnNames, t);
             });
@@ -168,8 +185,8 @@ public class Principal extends JFrame {
         ImageIcon icon = new ImageIcon(imagePath);
         Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         JButton button = new JButton(new ImageIcon(scaledImage));
-        //button.setBorderPainted(false);
-        //button.setFocusPainted(false);
+        // button.setBorderPainted(false);
+        // button.setFocusPainted(false);
         button.setContentAreaFilled(false);
         return button;
     }

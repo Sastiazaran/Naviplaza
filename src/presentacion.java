@@ -19,7 +19,7 @@ public class presentacion extends JFrame {
         setLayout(new BorderLayout());
 
         try {
-            BufferedImage image = ImageIO.read(new File("Imagenes/up.jpg"));
+            BufferedImage image = ImageIO.read(new File("./src/Imagenes/up.jpg"));
             if (image != null) {
                 JLabel imageLabel = new JLabel(new ImageIcon(image));
                 imageLabel.setHorizontalAlignment(SwingConstants.CENTER);

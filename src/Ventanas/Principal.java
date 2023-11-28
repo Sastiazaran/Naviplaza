@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 public class Principal extends JFrame {
     private static Vendedora[] vendedoras;
@@ -19,6 +20,7 @@ public class Principal extends JFrame {
     private static Thread[] threads;
     private static Agentes[] agentes;
 
+    private static int t;
     private static VVendedoras vVendedoras;
     private static VClientes vClientes;
     private static VSanta vSanta;
@@ -26,6 +28,13 @@ public class Principal extends JFrame {
     private static int numberV;
     private static int numberC;
     private static int numberS;
+
+    private static Semaphore santaConv;
+    private static Semaphore descansoV;
+    private static Semaphore comprar;
+
+    private static JTextField textT;
+    private JLabel labelTime;
 
     JTextField textV;
     JTextField textS;
@@ -48,19 +57,19 @@ public class Principal extends JFrame {
 
         //Imagen
         vendedoraImages = new ArrayList<ImageIcon>();
-        vendedoraImages.add(new ImageIcon("Imagenes/Resized/image1.png"));
+        vendedoraImages.add(new ImageIcon("./src/Imagenes/Resized/image1.png"));
 
         //titulo
-        ImageIcon titleIcon = new ImageIcon("Imagenes/naviplazatittle.png");
+        ImageIcon titleIcon = new ImageIcon("./src/Imagenes/naviplazatittle.png");
         JLabel titleLabel = new JLabel(titleIcon);
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         // botones naviplaza
         JPanel panelBotones = new JPanel(new GridLayout(3, 1));
 
         // botones con imagen
-        JButton btnV = createImageButton("Imagenes/image1.png", 70, 70);
-        JButton btnC = createImageButton("Imagenes/image2.png", 50, 50);
-        JButton btnS = createImageButton("Imagenes/image3.png", 70, 70);
+        JButton btnV = createImageButton("./src/Imagenes/image1.png", 70, 70);
+        JButton btnC = createImageButton("./src/Imagenes/image2.png", 50, 50);
+        JButton btnS = createImageButton("./src/Imagenes/image3.png", 70, 70);
 
         btnV.addActionListener(new ActionListener() {
             @Override
@@ -124,7 +133,7 @@ public class Principal extends JFrame {
 
         // inicio
         JPanel panelBotonCentral = new JPanel(new BorderLayout());
-        JButton btnInicio = createImageButton("Imagenes/naviplazastart.png", 200, 100);
+        JButton btnInicio = createImageButton("./src/Imagenes/naviplazastart.png", 200, 100);
         btnInicio.addActionListener((ActionListener) new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -140,9 +149,20 @@ public class Principal extends JFrame {
         contenedorPrincipal.add(titleLabel, BorderLayout.NORTH);
         panelBotonCentral.add(btnInicio, BorderLayout.CENTER);
 
+        labelTime = new JLabel("Time in events:");
+        panelTextFields.add(labelTime);
+        textT = new JTextField();
+        panelTextFields.add(textT);
+
+        JPanel tPanel = new JPanel(new GridLayout(2, 2));
+        tPanel.add(labelTime);
+        tPanel.add(textT);
+
         contenedorPrincipal.add(panelBotones);
         contenedorPrincipal.add(panelTextFields);
+        contenedorPrincipal.add(tPanel);
         contenedorPrincipal.add(panelBotonCentral);
+        
         add(contenedorPrincipal);
 
         setVisible(true);
@@ -157,8 +177,16 @@ public class Principal extends JFrame {
         threads = new Thread[total];
         agentes = new Agentes[total];
 
+        descansoV = new Semaphore((int) numberV / 10 + 1);
+        santaConv = new Semaphore((int) numberS);
+        comprar = new Semaphore((int) numberV);
+        Semaphore clienteSS = new Semaphore((int) numberS);
+        Semaphore clienteVS = new Semaphore((int) numberV);
+
+        t = Integer.valueOf(textT.getText());
+
         for(int i = 0; i<numberV; i++){
-            Vendedora v = new Vendedora(MAXWIDTH, MAXHEIGHT, null); // Pasar semaphores ()? Dictionary
+            Vendedora v = new Vendedora(MAXWIDTH, MAXHEIGHT, descansoV, comprar, t); // Pasar semaphores ()? Dictionary
             v.setName("Vendedora "+String.valueOf(i));
             vendedoras[i] = v;
             agentes[i] = v;
@@ -168,7 +196,7 @@ public class Principal extends JFrame {
             t.start();
         }
         for(int i = 0; i<numberC; i++){
-            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, null); // PASAR SEMPAHORES
+            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, clienteSS, clienteVS, t, vendedoras, santas); // PASAR SEMPAHORES
             c.setName("Cliente "+String.valueOf(i));
             clientes[i] = c;
             agentes[i+numberV] = c;
@@ -178,7 +206,7 @@ public class Principal extends JFrame {
             t.start();
         }
         for(int i = 0; i<numberS; i++){
-            Santa s = new Santa(MAXWIDTH, MAXHEIGHT, null); // SEMAPHore
+            Santa s = new Santa(MAXWIDTH, MAXHEIGHT, santaConv, t); // SEMAPHore
             s.setName("Santa "+String.valueOf(i));
             santas[i] = s;
             agentes[i+numberV+numberC] = s;

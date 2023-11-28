@@ -21,7 +21,6 @@ public class Matar extends JFrame {
     public Matar(Vendedora[] v, Cliente[] c, Santa[] s){
 
         setSize(200, 200);
-        setTitle("Matar a");
 
         vendedoras = v;
         clientes = c;

@@ -4,11 +4,15 @@ import java.util.concurrent.Semaphore;
 import javax.swing.ImageIcon;
 
 public class Santa extends Agentes {
+    private Semaphore santaS;
+    private boolean clienteEsperando;
 
-    public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem) {
-        super(MAXWIDTH, MAXHEIGHT, sem, "santa");
+    public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore semSanta, int t) {
+        super(MAXWIDTH, MAXHEIGHT, "santa");
         setEstado(Estados.DESCANSANDO);
-        t = 2000;
+        this.t = t;
+        santaS = semSanta;
+        clienteEsperando = false;
         img = new ImageIcon("./src/Imagenes/image2.png");
     }
 
@@ -57,7 +61,7 @@ public class Santa extends Agentes {
         }
     }
 
-    private int decidirQueHacer(){
+    private int decidirQueHacer() {
         return r.nextInt(2);
     }
 
@@ -65,19 +69,35 @@ public class Santa extends Agentes {
     public void run() {
         while (!unavailable()) {
             Descansando();
-            if(unavailable()) break;
+            if (unavailable())
+                break;
             int d = decidirQueHacer();
-            if(d==0){
-                Saludando();
-                if(unavailable()) break;
-                Platicando();
-                if(unavailable()) break;
-                Posando();
-                if(unavailable()) break;
-                Despidiendose();
-                if(unavailable()) break;
+            if (d == 0) {
+                try {
+                    santaS.acquire();
+                    Saludando();
+                    if (unavailable())
+                        break;
+                    Platicando();
+                    if (unavailable())
+                        break;
+                    Posando();
+                    if (unavailable())
+                        break;
+                    Despidiendose();
+                    if (unavailable())
+                        break;
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                santaS.release();
             }
         }
 
+    }
+
+    public void cliente(String name) {
+        clienteEsperando = true;
     }
 }

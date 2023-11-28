@@ -31,10 +31,14 @@ public class Principal extends JFrame {
         // principal
         setTitle("Naviplaza");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(1200, 300);
 
         JPanel contenedorPrincipal = new JPanel(new GridLayout(1, 3));
 
+        //titulo
+        ImageIcon titleIcon = new ImageIcon("Imagenes/naviplazatittle.png");
+        JLabel titleLabel = new JLabel(titleIcon);
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
         // botones naviplaza
         JPanel panelBotones = new JPanel(new GridLayout(3, 1));
 
@@ -84,7 +88,7 @@ public class Principal extends JFrame {
 
         // inicio
         JPanel panelBotonCentral = new JPanel(new BorderLayout());
-        JButton btnInicio = createImageButton("Imagenes/naviplazastart.png", 110, 70);
+        JButton btnInicio = createImageButton("Imagenes/naviplazastart.png", 200, 100);
         btnInicio.addActionListener((ActionListener) new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -97,6 +101,7 @@ public class Principal extends JFrame {
         });
 
 
+        contenedorPrincipal.add(titleLabel, BorderLayout.NORTH);
         panelBotonCentral.add(btnInicio, BorderLayout.CENTER);
 
         contenedorPrincipal.add(panelBotones);
@@ -168,8 +173,6 @@ public class Principal extends JFrame {
         ImageIcon icon = new ImageIcon(imagePath);
         Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         JButton button = new JButton(new ImageIcon(scaledImage));
-        //button.setBorderPainted(false);
-        //button.setFocusPainted(false);
         button.setContentAreaFilled(false);
         return button;
     }

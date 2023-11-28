@@ -3,6 +3,7 @@ package Agentes;
 import java.util.concurrent.Semaphore;
 import javax.swing.ImageIcon;
 
+
 public class Vendedora extends Agentes {
 
     public Vendedora(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem) {
@@ -68,22 +69,22 @@ public class Vendedora extends Agentes {
         Thread.sleep(t/2); 
     }
 
-    @Override
+   @Override
     public void run() {
         while (!unavailable()) {
-            try { 
+            try {
                 esperarCliente();
-                if(unavailable()) break;
+                if (unavailable()) break;
                 decidirDescansar();
-                if(unavailable()) break;
-                if(unavailable()) break;
+                if (unavailable()) break;
+                if (unavailable()) break;
                 mostrarProducto();
-                if(unavailable()) break;
+                if (unavailable()) break;
                 cobrar();
                 decidirEnvoltura();
-                if(unavailable()) break;
+                if (unavailable()) break;
                 envolverYEntregar();
-                if(unavailable()) break;
+                if (unavailable()) break;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

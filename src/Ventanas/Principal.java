@@ -10,6 +10,7 @@ import Agentes.Vendedora;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Semaphore;
 
 public class Principal extends JFrame {
     private static Vendedora[] vendedoras;
@@ -22,6 +23,10 @@ public class Principal extends JFrame {
     private static int numberV;
     private static int numberC;
     private static int numberS;
+
+    private static Semaphore santaConv;
+    private static Semaphore descansoV;
+    private static Semaphore comprar;
 
     private static JTextField textT;
     private JLabel labelTime;
@@ -131,10 +136,14 @@ public class Principal extends JFrame {
         threads = new Thread[total];
         agentes = new Agentes[total];
 
+        descansoV = new Semaphore((int) numberV / 10 + 1);
+        santaConv = new Semaphore((int) numberS);
+        comprar = new Semaphore((int) numberV);
+
         t = Integer.valueOf(textT.getText());
 
         for (int i = 0; i < numberV; i++) {
-            Vendedora v = new Vendedora(MAXWIDTH, MAXHEIGHT, null, t); // Pasar semaphores ()? Dictionary
+            Vendedora v = new Vendedora(MAXWIDTH, MAXHEIGHT, descansoV, comprar, t); // Pasar semaphores ()? Dictionary
             v.setName("Vendedora " + String.valueOf(i));
             vendedoras[i] = v;
             agentes[i] = v;
@@ -144,7 +153,7 @@ public class Principal extends JFrame {
             t.start();
         }
         for (int i = 0; i < numberC; i++) {
-            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, null, t); // PASAR SEMPAHORES
+            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, santaConv, comprar, t); // PASAR SEMPAHORES
             c.setName("Cliente " + String.valueOf(i));
             clientes[i] = c;
             agentes[i + numberV] = c;
@@ -154,7 +163,7 @@ public class Principal extends JFrame {
             t.start();
         }
         for (int i = 0; i < numberS; i++) {
-            Santa s = new Santa(MAXWIDTH, MAXHEIGHT, null, t); // SEMAPHore
+            Santa s = new Santa(MAXWIDTH, MAXHEIGHT, santaConv, t); // SEMAPHore
             s.setName("Santa " + String.valueOf(i));
             santas[i] = s;
             agentes[i + numberV + numberC] = s;

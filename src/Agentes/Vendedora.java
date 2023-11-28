@@ -4,11 +4,15 @@ import java.util.concurrent.Semaphore;
 import javax.swing.ImageIcon;
 
 public class Vendedora extends Agentes {
+    private Semaphore venderS;
+    private Semaphore descansS;
 
-    public Vendedora(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem, int t) {
-        super(MAXWIDTH, MAXHEIGHT, sem, "vendedora");
+    public Vendedora(int MAXWIDTH, int MAXHEIGHT, Semaphore descS, Semaphore vendS, int t) {
+        super(MAXWIDTH, MAXHEIGHT, "vendedora");
         setEstado(Estados.ESPERANDOCLIENTE);
         this.t = t;
+        venderS = vendS;
+        descansS = descS;
         img = new ImageIcon("Imagenes/image1.png");
     }
 
@@ -75,21 +79,26 @@ public class Vendedora extends Agentes {
                 esperarCliente();
                 if (unavailable())
                     break;
+                descansS.acquire();
                 decidirDescansar();
+                descansS.release();
                 if (unavailable())
                     break;
-                if (unavailable())
-                    break;
-                mostrarProducto();
-                if (unavailable())
-                    break;
-                cobrar();
-                decidirEnvoltura();
-                if (unavailable())
-                    break;
-                envolverYEntregar();
-                if (unavailable())
-                    break;
+                try {
+                    venderS.acquire();
+                    mostrarProducto();
+                    if (unavailable())
+                        break;
+                    cobrar();
+                    decidirEnvoltura();
+                    if (unavailable())
+                        break;
+                    envolverYEntregar();
+                    if (unavailable())
+                        break;
+                } catch (Exception e) {
+                }
+                venderS.release();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

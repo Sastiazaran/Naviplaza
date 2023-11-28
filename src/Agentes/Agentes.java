@@ -12,28 +12,26 @@ public abstract class Agentes implements Runnable {
     int y;
     boolean dead;
     Agentes interactuaCon;
-    Semaphore[] s;
     int t;
     String name;
     String type;
     String secCrit;
     String buffer;
-    
-    public Agentes(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem, String t){
+
+    public Agentes(int MAXWIDTH, int MAXHEIGHT, String t) {
         r = new Random();
         x = r.nextInt(MAXWIDTH);
         y = r.nextInt(MAXHEIGHT);
         setDead(false);
         setBuffer("none");
         setSecCrit("none");
-        s = sem;
         type = t;
     }
-    
-    public void setName(String s){
-        name = s;    
+
+    public void setName(String s) {
+        name = s;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -41,11 +39,11 @@ public abstract class Agentes implements Runnable {
     public String getEstado() {
         return estado.name();
     }
-    
+
     public void setEstado(Estados estado) {
         this.estado = estado;
     }
-    
+
     public String getSecCrit() {
         return secCrit;
     }
@@ -53,11 +51,11 @@ public abstract class Agentes implements Runnable {
     public void setSecCrit(String secCrit) {
         this.secCrit = secCrit;
     }
-    
+
     public String getBuffer() {
         return buffer;
     }
-    
+
     public void setBuffer(String buffer) {
         this.buffer = buffer;
     }
@@ -66,13 +64,13 @@ public abstract class Agentes implements Runnable {
         return dead;
     }
 
-    public boolean isPanic(){
-        if(estado==Estados.PANICO){
+    public boolean isPanic() {
+        if (estado == Estados.PANICO) {
             return true;
         }
         return false;
     }
-    
+
     public void setDead(boolean dead) {
         this.dead = dead;
         setBuffer("none");
@@ -80,11 +78,11 @@ public abstract class Agentes implements Runnable {
         setEstado(Estados.MUERTO);
     }
 
-    public String getDeadString(){
+    public String getDeadString() {
         return String.valueOf(dead);
     }
 
-    public void sleep(){
+    public void sleep() {
         try {
             Thread.sleep(t);
         } catch (InterruptedException e) {
@@ -93,8 +91,9 @@ public abstract class Agentes implements Runnable {
         }
     }
 
-    public boolean unavailable(){
-        if(isDead() || isPanic()) return true;
+    public boolean unavailable() {
+        if (isDead() || isPanic())
+            return true;
         return false;
     }
 

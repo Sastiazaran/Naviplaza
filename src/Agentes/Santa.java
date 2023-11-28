@@ -4,11 +4,13 @@ import java.util.concurrent.Semaphore;
 import javax.swing.ImageIcon;
 
 public class Santa extends Agentes {
+    private Semaphore santaS;
 
-    public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem, int t) {
-        super(MAXWIDTH, MAXHEIGHT, sem, "santa");
+    public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore semSanta, int t) {
+        super(MAXWIDTH, MAXHEIGHT, "santa");
         setEstado(Estados.DESCANSANDO);
         this.t = t;
+        santaS = semSanta;
         img = new ImageIcon("./src/Imagenes/image2.png");
     }
 
@@ -69,18 +71,25 @@ public class Santa extends Agentes {
                 break;
             int d = decidirQueHacer();
             if (d == 0) {
-                Saludando();
-                if (unavailable())
-                    break;
-                Platicando();
-                if (unavailable())
-                    break;
-                Posando();
-                if (unavailable())
-                    break;
-                Despidiendose();
-                if (unavailable())
-                    break;
+                try {
+                    santaS.acquire();
+                    Saludando();
+                    if (unavailable())
+                        break;
+                    Platicando();
+                    if (unavailable())
+                        break;
+                    Posando();
+                    if (unavailable())
+                        break;
+                    Despidiendose();
+                    if (unavailable())
+                        break;
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                santaS.release();
             }
         }
 

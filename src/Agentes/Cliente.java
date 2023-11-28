@@ -4,11 +4,15 @@ import java.util.concurrent.Semaphore;
 import javax.swing.ImageIcon;
 
 public class Cliente extends Agentes {
+    private Semaphore santaS;
+    private Semaphore comprarS;
 
-    public Cliente(int MAXWIDTH, int MAXHEIGHT, Semaphore[] sem, int t) {
-        super(MAXWIDTH, MAXHEIGHT, sem, "cliente");
+    public Cliente(int MAXWIDTH, int MAXHEIGHT, Semaphore santaSem, Semaphore comprarSem, int t) {
+        super(MAXWIDTH, MAXHEIGHT, "cliente");
         setEstado(Estados.PASEANDO);
         this.t = t;
+        santaS = santaSem;
+        comprarS = comprarSem;
         img = new ImageIcon("./src/Imagenes/image2.png");
     }
 
@@ -81,25 +85,39 @@ public class Cliente extends Agentes {
                 break;
             switch (d) {
                 case 0:
-                    esperarSanta();
-                    if (unavailable())
-                        break;
-                    conSanta();
+                    try {
+                        santaS.acquire();
+                        esperarSanta();
+                        if (unavailable())
+                            break;
+                        conSanta();
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    santaS.release();
                     break;
                 case 1:
-                    if (verRegalos()) {
-                        if (unavailable())
-                            break;
-                        escogiendo();
-                        if (unavailable())
-                            break;
-                        if (quiereEnvoltura()) {
-                            envoltura();
+                    try {
+                        comprarS.acquire();
+                        if (verRegalos()) {
+                            if (unavailable())
+                                break;
+                            escogiendo();
+                            if (unavailable())
+                                break;
+                            if (quiereEnvoltura()) {
+                                envoltura();
+                            }
+                            if (unavailable())
+                                break;
+                            pagar();
                         }
-                        if (unavailable())
-                            break;
-                        pagar();
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
+                    comprarS.release();
                     break;
                 case 2:
                     break;

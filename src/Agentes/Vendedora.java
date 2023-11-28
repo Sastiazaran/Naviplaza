@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 public class Vendedora extends Agentes {
     private Semaphore venderS;
     private Semaphore descansS;
+    private boolean clienteEsperando;
 
     public Vendedora(int MAXWIDTH, int MAXHEIGHT, Semaphore descS, Semaphore vendS, int t) {
         super(MAXWIDTH, MAXHEIGHT, "vendedora");
@@ -13,6 +14,7 @@ public class Vendedora extends Agentes {
         this.t = t;
         venderS = vendS;
         descansS = descS;
+        clienteEsperando = false;
         img = new ImageIcon("Imagenes/image1.png");
     }
 
@@ -105,4 +107,7 @@ public class Vendedora extends Agentes {
         }
     }
 
+    public void cliente(String name) {
+        clienteEsperando = true;
+    }
 }

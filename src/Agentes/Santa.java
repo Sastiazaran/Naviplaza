@@ -5,12 +5,14 @@ import javax.swing.ImageIcon;
 
 public class Santa extends Agentes {
     private Semaphore santaS;
+    private boolean clienteEsperando;
 
     public Santa(int MAXWIDTH, int MAXHEIGHT, Semaphore semSanta, int t) {
         super(MAXWIDTH, MAXHEIGHT, "santa");
         setEstado(Estados.DESCANSANDO);
         this.t = t;
         santaS = semSanta;
+        clienteEsperando = false;
         img = new ImageIcon("./src/Imagenes/image2.png");
     }
 
@@ -93,5 +95,9 @@ public class Santa extends Agentes {
             }
         }
 
+    }
+
+    public void cliente(String name) {
+        clienteEsperando = true;
     }
 }

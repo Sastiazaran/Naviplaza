@@ -1,7 +1,6 @@
 package Agentes;
 
 import java.util.Random;
-import java.util.concurrent.Semaphore;
 import javax.swing.ImageIcon;
 
 public abstract class Agentes implements Runnable {

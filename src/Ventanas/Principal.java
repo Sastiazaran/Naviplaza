@@ -139,6 +139,8 @@ public class Principal extends JFrame {
         descansoV = new Semaphore((int) numberV / 10 + 1);
         santaConv = new Semaphore((int) numberS);
         comprar = new Semaphore((int) numberV);
+        Semaphore clienteSS = new Semaphore((int) numberS);
+        Semaphore clienteVS = new Semaphore((int) numberV);
 
         t = Integer.valueOf(textT.getText());
 
@@ -152,16 +154,6 @@ public class Principal extends JFrame {
             threads[i] = t;
             t.start();
         }
-        for (int i = 0; i < numberC; i++) {
-            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, santaConv, comprar, t); // PASAR SEMPAHORES
-            c.setName("Cliente " + String.valueOf(i));
-            clientes[i] = c;
-            agentes[i + numberV] = c;
-            Thread t = new Thread(c);
-            t.setName("Cliente " + String.valueOf(i));
-            threads[i + numberV] = t;
-            t.start();
-        }
         for (int i = 0; i < numberS; i++) {
             Santa s = new Santa(MAXWIDTH, MAXHEIGHT, santaConv, t); // SEMAPHore
             s.setName("Santa " + String.valueOf(i));
@@ -170,6 +162,17 @@ public class Principal extends JFrame {
             Thread t = new Thread(s);
             t.setName("Santa " + String.valueOf(i));
             threads[i + numberV + numberC] = t;
+            t.start();
+        }
+        for (int i = 0; i < numberC; i++) {
+            Cliente c = new Cliente(MAXWIDTH, MAXHEIGHT, clienteSS, clienteVS, t, vendedoras, santas); // PASAR
+                                                                                                       // SEMPAHORES
+            c.setName("Cliente " + String.valueOf(i));
+            clientes[i] = c;
+            agentes[i + numberV] = c;
+            Thread t = new Thread(c);
+            t.setName("Cliente " + String.valueOf(i));
+            threads[i + numberV] = t;
             t.start();
         }
 

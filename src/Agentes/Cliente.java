@@ -6,13 +6,18 @@ import javax.swing.ImageIcon;
 public class Cliente extends Agentes {
     private Semaphore santaS;
     private Semaphore comprarS;
+    private Santa[] santas;
+    private Vendedora[] vendedoras;
 
-    public Cliente(int MAXWIDTH, int MAXHEIGHT, Semaphore santaSem, Semaphore comprarSem, int t) {
+    public Cliente(int MAXWIDTH, int MAXHEIGHT, Semaphore santaSem, Semaphore comprarSem, int t, Vendedora[] v,
+            Santa[] s) {
         super(MAXWIDTH, MAXHEIGHT, "cliente");
         setEstado(Estados.PASEANDO);
         this.t = t;
         santaS = santaSem;
         comprarS = comprarSem;
+        santas = s;
+        vendedoras = v;
         img = new ImageIcon("./src/Imagenes/image2.png");
     }
 

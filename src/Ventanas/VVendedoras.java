@@ -8,30 +8,36 @@ import java.util.Random;
 
 public class VVendedoras extends JPanel {
     private List<Point> points;
-    private List<ImageIcon> vendedoraImages;
+    private List<Image> vendedoraImages;
 
-    public VVendedoras(ArrayList<ImageIcon> vendedoraImages) {
+    public VVendedoras() {
         this.points = new ArrayList<>();
-        this.vendedoraImages = vendedoraImages;
+        this.vendedoraImages = new ArrayList<>();
         setPreferredSize(new Dimension(300, 300));
-        movePoints();  // Initialize points
-        startMoving(); // Start moving points
     }
 
-    private void movePoints() {
+    public void movePoints(int numberOfVendedoras) {
         Random random = new Random();
         points.clear();
 
         for (int i = 0; i < Principal.getNumberV(); i++) {
-            int x = random.nextInt(1200);
+            int x = random.nextInt(300);
             int y = random.nextInt(300);
             points.add(new Point(x, y));
         }
     }
 
-    private void startMoving() {
+    public void setVendImages(List<ImageIcon> images) {
+        vendedoraImages.clear();
+        for (ImageIcon icon : images) {
+            Image image = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            vendedoraImages.add(image);
+        }
+    }
+
+    public void startMoving(int numberOfVendedoras) {
         Timer timer = new Timer(1000, e -> {
-            movePoints();
+            movePoints(numberOfVendedoras);
             repaint();
         });
         timer.start();
@@ -41,9 +47,12 @@ public class VVendedoras extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (int i = 0; i < points.size(); i++) {
-            Point point = points.get(i);
-            Image vendedoraImage = vendedoraImages.get(0).getImage();
-            g.drawImage(vendedoraImage, point.x, point.y, this);
+            if (i < vendedoraImages.size()) {
+                Image image = vendedoraImages.get(i);
+                Point position = points.get(i);
+                g.drawImage(image, position.x, position.y, this);
+            }
+
         }
     }
 }

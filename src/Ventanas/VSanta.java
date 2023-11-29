@@ -7,16 +7,19 @@ import java.util.List;
 import java.util.Random;
 
 public class VSanta extends JPanel {
-private List<Point> points;
+
+    private List<Point> points;
+    private List<Image> santaImages;
 
     public VSanta() {
+
         this.points = new ArrayList<>();
+        this.santaImages = new ArrayList<>();
         setPreferredSize(new Dimension(300, 300));
-        movePoints();  // Initialize points
-        startMoving(); // Start moving points
+
     }
 
-    private void movePoints() {
+    public void movePoints(int numberOfSantas) {
         Random random = new Random();
         points.clear();
 
@@ -27,9 +30,18 @@ private List<Point> points;
         }
     }
 
-    private void startMoving() {
+    public void setSantaImages(List<ImageIcon> images) {
+        santaImages.clear();
+        for (ImageIcon icon : images) {
+            Image image = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            santaImages.add(image);
+        }
+
+    }
+
+    public void startMoving(int numberOfSantas) {
         Timer timer = new Timer(1000, e -> {
-            movePoints();
+            movePoints(numberOfSantas);
             repaint();
         });
         timer.start();
@@ -38,10 +50,13 @@ private List<Point> points;
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.RED);
-
-        for (Point point : points) {
-            g.fillOval(point.x, point.y, 10, 10);
+        // Dibujar las imágenes en lugar de los puntos
+        for (int i = 0; i < points.size(); i++) {
+            if (i < santaImages.size()) {
+                Image image = santaImages.get(i);
+                Point position = points.get(i);
+                g.drawImage(image, position.x, position.y, this);
+            }
         }
     }
 

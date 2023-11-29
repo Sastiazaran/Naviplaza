@@ -8,6 +8,7 @@ public class Cliente extends Agentes {
     private Semaphore comprarS;
     private Santa[] santas;
     private Vendedora[] vendedoras;
+    
 
     public Cliente(int MAXWIDTH, int MAXHEIGHT, Semaphore santaSem, Semaphore comprarSem, int t, Vendedora[] v, Santa[] s) {
         super(MAXWIDTH, MAXHEIGHT, "cliente");

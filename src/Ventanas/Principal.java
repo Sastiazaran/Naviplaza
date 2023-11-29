@@ -46,6 +46,8 @@ public class Principal extends JFrame {
     static boolean started = false;
 
     private static ArrayList<ImageIcon> vendedoraImages;
+    private static ArrayList<ImageIcon> santaImages;
+    private static ArrayList<ImageIcon> clientImages;
 
     public Principal() {
         // principal
@@ -55,9 +57,27 @@ public class Principal extends JFrame {
 
         JPanel contenedorPrincipal = new JPanel(new GridLayout(1, 3));
 
-        //Imagen
+        //VendedoraImages
         vendedoraImages = new ArrayList<ImageIcon>();
-        vendedoraImages.add(new ImageIcon("./src/Imagenes/Resized/image1.png"));
+        String imagePathVendedora = "./src/Imagenes/Resized/image1.png";
+        for (int i = 0; i < 100000; i++) {
+            vendedoraImages.add(new ImageIcon(imagePathVendedora));
+        }
+
+        //SantaImages
+        santaImages = new ArrayList<ImageIcon>();
+        String imagePathSanta = "./src/Imagenes/StateImages/Santa/santa_posando.png";
+        for (int i = 0; i < 100000; i++) {
+            santaImages.add(new ImageIcon(imagePathSanta));
+        }
+
+        //ClienteImages
+        clientImages = new ArrayList<ImageIcon>();
+        String imagePathClient = "./src/Imagenes/StateImages/Cliente/cliente_paseando.jpg";
+        for (int i = 0; i < 100000; i++) {
+            clientImages.add(new ImageIcon(imagePathClient));
+            
+        }
 
         //titulo
         ImageIcon titleIcon = new ImageIcon("./src/Imagenes/naviplazatittle.png");
@@ -78,7 +98,10 @@ public class Principal extends JFrame {
                 createAgentTable(vendedoras, numberV, events, 0);
                 numberV = Integer.parseInt(textV.getText());
                 JFrame f = new JFrame();
-                vVendedoras = new VVendedoras(vendedoraImages);
+                vVendedoras = new VVendedoras();
+                vVendedoras.setVendImages(vendedoraImages);
+                vVendedoras.movePoints(numberV);
+                vVendedoras.startMoving(numberV);
                 f.setSize(500,500);
                 f.add(vVendedoras, BorderLayout.CENTER);
                 f.show();
@@ -94,6 +117,9 @@ public class Principal extends JFrame {
                 numberC = Integer.parseInt(textC.getText());
                 JFrame f = new JFrame();
                 vClientes = new VClientes();
+                vClientes.setClientImages(clientImages);
+                vClientes.movePoints(numberC);
+                vClientes.startMoving(numberC);
                 f.setSize(500,500);
                 f.add(vClientes, BorderLayout.CENTER);
                 f.show();
@@ -109,6 +135,9 @@ public class Principal extends JFrame {
                 numberS = Integer.parseInt(textS.getText());
                 JFrame f = new JFrame();
                 vSanta = new VSanta();
+                vSanta.setSantaImages(santaImages);
+                vSanta.movePoints(numberS);
+                vSanta.startMoving(numberS);
                 f.setSize(500,500);
                 f.add(vSanta, BorderLayout.CENTER);
                 f.show();

@@ -9,28 +9,36 @@ import java.util.Random;
 public class VClientes extends JPanel {
 
    private List<Point> points;
+   private List<Image> clientImages;
 
     public VClientes() {
         this.points = new ArrayList<>();
-        setPreferredSize(new Dimension(1200, 300));
-        movePoints();  // Initialize points
-        startMoving(); // Start moving points
+        this.clientImages = new ArrayList<>();
+        setPreferredSize(new Dimension(300, 300));
     }
 
-    private void movePoints() {
+    public void movePoints(int numberOfClients) {
         Random random = new Random();
         points.clear();
 
         for (int i = 0; i < Principal.getNumberC(); i++) {
-            int x = random.nextInt(300);
-            int y = random.nextInt(300);
+            int x = random.nextInt(200);
+            int y = random.nextInt(200);
             points.add(new Point(x, y));
         }
     }
 
-    private void startMoving() {
+    public void setClientImages(List<ImageIcon> images){
+        clientImages.clear();
+        for(ImageIcon icon : images){
+            Image image = icon.getImage().getScaledInstance(50,50, Image.SCALE_SMOOTH);
+            clientImages.add(image);
+        }
+    }
+
+    public void startMoving(int numberOfClients) {
         Timer timer = new Timer(1000, e -> {
-            movePoints();
+            movePoints(numberOfClients);
             repaint();
         });
         timer.start();
@@ -39,10 +47,13 @@ public class VClientes extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.GRAY);
-
-        for (Point point : points) {
-            g.fillOval(point.x, point.y, 10, 10);
+        for (int i = 0; i < points.size(); i++) {
+            if(i < clientImages.size()){
+                Image image = clientImages.get(i);
+                Point position = points.get(i);
+                g.drawImage(image, position.x, position.y, this);
+            }
+            
         }
     }
 

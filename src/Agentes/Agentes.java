@@ -16,6 +16,7 @@ public abstract class Agentes implements Runnable {
     String type;
     String secCrit;
     String buffer;
+    private Agentes agente;
 
     public Agentes(int MAXWIDTH, int MAXHEIGHT, String t) {
         r = new Random();
@@ -96,9 +97,11 @@ public abstract class Agentes implements Runnable {
         return false;
     }
 
+    
+  
     public String getEstado(Estados e) {
         if (estado == e) {
-            return "X";
+            return "Cliente";
         }
         return " ";
     }

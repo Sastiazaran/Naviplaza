@@ -29,7 +29,7 @@ public class Matar extends JFrame {
 
         setTitle("Kill agent");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(260, 180);
+        setSize(280, 200);
 
         JComboBox<String> tipo = new JComboBox<>();
         JTextField number = new JTextField();
@@ -101,8 +101,10 @@ public class Matar extends JFrame {
             }
         });
 
-        setLocationByPlatform(true);
+        setLocation(80, 80);
         setVisible(true);
+        toFront();
+        requestFocus();
     }
 
     private static int length(Object[] array) {
